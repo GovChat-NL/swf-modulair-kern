@@ -1,7 +1,7 @@
-# De kern van GovChat: de instellingen die voor elke organisatie gelijk zijn.
-# Hoort bij de officiële LibreChat-chart (zie kern.yaml en README.md). Wat per
-# organisatie verschilt, staat in de uitrolrepository van die organisatie.
-# Hier staan geen Secrets, alleen namen.
+# The kern of GovChat: the settings that are the same for each organisation.
+# These are values for the official LibreChat chart (see kern.yaml and README.md).
+# The settings of one organisation are in the deploy repository of that organisation.
+# There are no Secrets here, only names.
 
 # One replica on a ReadWriteOnce volume, so stop the old pod before starting the new one.
 updateStrategy:

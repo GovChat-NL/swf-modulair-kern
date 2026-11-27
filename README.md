@@ -1,106 +1,101 @@
-> # ⚠️ LET OP: tijdelijke naam
-> Deze repository heet nu `swf-modulair-kern` omdat dit een pilot is voor een modulaire GovChat,
-> gestart door Súdwest-Fryslân met toestemming van GovChat-NL. Werkt de pilot en is iedereen
-> het eens, dan kan de naam in de toekomst `GovChat-NL-kern` worden.
+> # ⚠️ NOTE: temporary name
+> This repository has the name `swf-modulair-kern` because this is a pilot for a modular
+> GovChat. Súdwest-Fryslân started the pilot with the approval of GovChat-NL. If the pilot
+> is a success and all parties agree, the name can become `GovChat-NL-kern`.
 
 <img src="icon.svg" width="64" height="64" alt="">
 
 # swf-modulair-kern
 
-De kale GovChat op Kubernetes: [LibreChat](https://www.librechat.ai) met de officiële
-Helm-chart, en de instellingen die er GovChat van maken. Een medewerker logt in met het
-account van de eigen organisatie, stelt een vraag en krijgt een antwoord. Verder staat
-alles uit.
+The kern is the basic GovChat on Kubernetes. It is [LibreChat](https://www.librechat.ai)
+with the official Helm chart, and the settings that make it GovChat. An employee logs in
+with the account of the organisation, asks a question and gets an answer. All other
+functions are off.
 
-Er is geen fork, geen eigen image en geen eigen chart. Deze repository bevat alleen
-instellingen, en is voor elke organisatie gelijk.
+There is no fork, no own image and no own chart. This repository contains settings only.
+It is the same for each organisation.
 
-Dit is één van vier repositories die bij elkaar horen:
+This is one of four repositories that belong together:
 
-| Repository | Wat |
+| Repository | Function |
 |---|---|
-| **`swf-modulair-kern`** | de kale chat (deze repository) |
-| [`swf-modulair-app-time`](https://github.com/GovChat-NL/swf-modulair-app-time) | de proefapp, en het voorbeeld van hoe een app eruitziet |
-| [`swf-modulair-manager`](https://github.com/GovChat-NL/swf-modulair-manager) | de app-manager, die de uitrol samenstelt; hier staat ook het appcontract |
-| [`swf-modulair-deploy-template`](https://github.com/GovChat-NL/swf-modulair-deploy-template) | de uitrolbasis waar een organisatie één keer een eigen repository van maakt |
+| **`swf-modulair-kern`** | The basic chat (this repository). |
+| [`swf-modulair-app-time`](https://github.com/GovChat-NL/swf-modulair-app-time) | The trial app, and the example of an app. |
+| [`swf-modulair-manager`](https://github.com/GovChat-NL/swf-modulair-manager) | The `govchat` command, and the rules for an app. |
+| [`swf-modulair-deploy-template`](https://github.com/GovChat-NL/swf-modulair-deploy-template) | The start point for the deploy repository of an organisation. |
 
-## Wat erin zit
+## The files
 
-| Waar | Wat |
+| File | Function |
 |---|---|
-| `kern.yaml` | Wat de kern is: de chart, de versie, de Secrets bij naam en wat een organisatie moet invullen. Gelezen door de app-manager. |
-| `values.yaml` | De instellingen van de kern, met het hele `librechat.yaml` erin. |
-| `local/` | Een lokale proef zonder Azure en zonder Entra. |
-| `controles/afscherming.sh` | Toont van buitenaf aan dat je er zonder het account van de organisatie niet in komt. |
+| `kern.yaml` | Tells the `govchat` command what the kern is: the chart, the version, the names of the Secrets and the settings that an organisation must give. |
+| `values.yaml` | The settings of the kern. The full `librechat.yaml` is in this file. |
+| `local/services.yaml` | For a local test: a replacement for the language model and a database. |
 
-Wat er draait: twee pods, LibreChat en de MongoDB die bij de chart hoort.
+The kern has two pods: LibreChat, and the MongoDB that comes with the chart.
 
-## Wat de kern meebrengt
+## What the kern gives
 
-- Inloggen kan alleen met het account van de eigen organisatie (OpenID Connect). Lokaal inloggen, registreren en een wachtwoord herstellen worden geweigerd.
-- Alleen accounts met de rol `govchat-user` komen binnen; `govchat-admin` is beheerder.
-- Elk gesprek is na 30 dagen weg.
-- Onder de chat staat de disclaimer.
-- Een vaste instructie waarschuwt bij het invoeren van persoonsgegevens.
-- Eén verbinding met een taalmodel (Azure OpenAI). Eén vaste assistent.
-- Uit: uploads, zoeken, agents, tools, geheugen, spraak, gedeelde links, de modelkeuze.
+- Login is only possible with the account of the organisation (OpenID Connect). LibreChat refuses local login, registration and password reset.
+- Only accounts with the role `govchat-user` get access. The role `govchat-admin` is the administrator.
+- Each conversation is deleted after 30 days.
+- A disclaimer is shown below the chat.
+- A fixed instruction gives a warning when a user enters personal data.
+- One connection to a language model (Azure OpenAI). One fixed assistant.
+- Off: uploads, search, agents, tools, memory, speech, shared links and the model selection.
 
-Wat er niet in zit: de waarden van één organisatie, branding, een beheertool, n8n, LiteLLM.
-Die horen in de uitrolrepository of in een app.
+The kern does not contain the values of one organisation, the branding, a management tool,
+n8n or LiteLLM. These belong in the deploy repository or in an app.
 
-## Versies
+## Versions
 
-| Wat | Waar het vaststaat | Nu |
+| Part | Where the version is set | Now |
 |---|---|---|
-| De kern | `version` in `kern.yaml`, en de tag van deze repository | `0.1.0` |
-| De LibreChat-chart | `chartVersion` in `kern.yaml` | `3.2.1` |
-| Het LibreChat-image | volgt de chart | `v0.8.9` |
-| MongoDB | volgt de chart | `8.0.13` |
+| The kern | `version` in `kern.yaml`, and the tag of this repository | `0.2.0` |
+| The LibreChat chart | `chartVersion` in `kern.yaml` | `3.2.1` |
+| The LibreChat image | Comes with the chart | `v0.8.9` |
+| MongoDB | Comes with the chart | `8.0.13` |
 
-Een organisatie verwijst naar de kern met het adres van deze repository en een versie.
-Een tag verandert daarna niet meer.
+A tag does not change after it is made.
 
-## Lokaal proberen
+## How to use the kern
 
-Op een eigen wegwerpcluster, bijvoorbeeld Rancher Desktop, k3d of kind. Je hebt `kubectl`
-en `helm` nodig. Het image van LibreChat is 4,3 GB; de eerste keer duurt ruim tien minuten.
-
-```sh
-git clone --branch v0.1.0 https://github.com/GovChat-NL/swf-modulair-kern.git
-cd swf-modulair-kern
-local/start.sh
-kubectl -n govchat port-forward service/librechat-librechat 3080:3080
-```
-
-Open http://localhost:3080, maak een account en stel een vraag. Het stubmodel antwoordt
-altijd "Dit is een testantwoord van het stubmodel." Het stubmodel kan geen tools aanroepen.
-
-`local/services.yaml` brengt het stubmodel mee en een MongoDB zonder wachtwoord. De MongoDB
-van de chart heeft geen arm64-image en draait dus niet op een Mac met Apple Silicon.
-
-## Uitrollen
-
-Niet vanuit deze repository. Een organisatie maakt één keer een eigen repository van
-[`swf-modulair-deploy-template`](https://github.com/GovChat-NL/swf-modulair-deploy-template), kiest
-daar de versie van de kern en de apps, en laat de app-manager de uitrol samenstellen.
-
-## Een installatie controleren
+Do not deploy from this repository. An organisation has its own deploy repository, made
+from [`swf-modulair-deploy-template`](https://github.com/GovChat-NL/swf-modulair-deploy-template).
+In that repository, this command sets the version of the kern:
 
 ```sh
-controles/afscherming.sh https://govchat.example.nl
+./govchat kern set v0.2.0 --env acceptatie
 ```
 
-De controle kijkt van buitenaf of lokaal inloggen, registreren en een wachtwoord herstellen
-worden geweigerd, en of de API zonder login niets geeft. De verzoeken veranderen niets.
-Met de hand: een account met de rol `govchat-user` kan chatten, een account zonder niet.
+The command copies `kern.yaml` and `values.yaml` into the deploy repository. Thus the
+reviewer of the pull request sees each change of the kern.
 
-## Iets wijzigen
+## Local test
 
-Een wijziging aan de kern gaat via een issue en een pull request in deze repository.
-Niemand past de kern aan in een eigen kopie. Wat een organisatie erbij wil, is een app.
+Use the local environment of the deploy repository:
 
-## Herkomst
+```sh
+./govchat local up
+./govchat verify --env lokaal
+```
 
-Gevuld vanuit de map `deploy/` van de branch `swf/modulairKern` van `GovChat-NL/GovChat-NL`,
-commit `7e2474d` (20 november 2026). De licentie is nog niet gekozen; het voorstel is
-EUPL-1.2 en het besluit ligt bij de maintainers van GovChat-NL.
+The replacement model always answers "Dit is een testantwoord van het stubmodel." It
+cannot call tools. The MongoDB of the chart has no arm64 image. Thus the local test uses
+the MongoDB from `local/services.yaml`.
+
+## How to change the kern
+
+Make an issue and a pull request in this repository. Do not change the kern in a copy.
+If an organisation wants an added function, that function is an app.
+
+## Version 0.1.0
+
+Version 0.1.0 was made for the first tool (the app manager). Version 0.2.0 and later are
+for the `govchat` command. The settings in `values.yaml` did not change.
+
+## Origin
+
+The content comes from the folder `deploy/` of the branch `swf/modulairKern` of
+`GovChat-NL/GovChat-NL`, commit `7e2474d` (20 November 2026). The licence is not chosen
+yet. The proposal is EUPL-1.2. The maintainers of GovChat-NL make the decision.

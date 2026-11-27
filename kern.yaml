@@ -1,22 +1,33 @@
-# Wat de kern is. Gelezen door de app-manager; voor elke organisatie gelijk.
+# What the kern is. The govchat command reads this file. It is the same for each organisation.
 name: kern
-version: 0.1.0
-contract: v1
+version: 0.2.0
+contract: v2
 chart: oci://ghcr.io/librechat-ai/librechat-chart/librechat
 chartVersion: 3.2.1          # LibreChat v0.8.9
 releaseName: librechat
 values: values.yaml
-# De Secrets die in het cluster moeten staan, alleen bij naam.
+# For a local test only: a replacement for the language model and a database.
+localServices: local/services.yaml
+# The labels of the LibreChat pod. Only this pod can connect to an app.
+clientLabels:
+  app.kubernetes.io/name: librechat-librechat
+# The Secrets that must be in the cluster. Names only, no values.
+# "generate": the govchat command makes a random value (the number is the length in bytes).
+# "provide": the administrator gives the value.
 secrets:
   - name: librechat-credentials-env
-    keys: [CREDS_KEY, CREDS_IV, JWT_SECRET, JWT_REFRESH_SECRET, OPENID_SESSION_SECRET, OPENID_CLIENT_SECRET, AZURE_MODEL_KEY]
+    generate: { CREDS_KEY: 32, CREDS_IV: 16, JWT_SECRET: 32, JWT_REFRESH_SECRET: 32, OPENID_SESSION_SECRET: 32 }
+    provide: [OPENID_CLIENT_SECRET, AZURE_MODEL_KEY]
   - name: librechat-mongodb-auth
-    keys: [mongodb-root-password]
-# Wat een organisatie moet invullen (in values/kern.yaml van de uitrolrepository).
+    generate: { mongodb-root-password: 24 }
+# The settings that an organisation must give (in shared/kern.yaml or
+# <environment>/kern/settings.yaml of the deploy repository).
 config:
-  librechat.configEnv.DOMAIN_CLIENT: { verplicht: true }
-  librechat.configEnv.DOMAIN_SERVER: { verplicht: true }
-  librechat.configEnv.AZURE_INSTANCE_NAME: { verplicht: true }
-  librechat.configEnv.AZURE_DEPLOYMENT_NAME: { verplicht: true }
-  librechat.configEnv.AZURE_API_VERSION: { verplicht: true }
-  librechat.configEnv.AZURE_BASE_URL: { verplicht: true }
+  librechat.configEnv.DOMAIN_CLIENT: { required: true, description: "Web address of the chat" }
+  librechat.configEnv.DOMAIN_SERVER: { required: true, description: "Web address of the chat" }
+  librechat.configEnv.OPENID_ISSUER: { required: true, description: "OpenID issuer (Entra ID: https://login.microsoftonline.com/<tenant id>/v2.0/)" }
+  librechat.configEnv.OPENID_CLIENT_ID: { required: true, description: "OpenID client ID (Entra ID: the application ID of the app registration)" }
+  librechat.configEnv.AZURE_INSTANCE_NAME: { required: true, description: "Azure OpenAI resource name" }
+  librechat.configEnv.AZURE_DEPLOYMENT_NAME: { required: true, description: "Azure OpenAI deployment name" }
+  librechat.configEnv.AZURE_API_VERSION: { required: true, description: "Azure OpenAI API version" }
+  librechat.configEnv.AZURE_BASE_URL: { required: true, description: "Azure OpenAI base URL (it ends with /openai/deployments/<deployment name>)" }
