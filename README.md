@@ -15,6 +15,7 @@ functions are off.
 There is no fork, no own image and no own chart. This repository contains settings only.
 It is the same for each organisation.
 
+> [!IMPORTANT]
 > **Start here: the deploy repository.**
 > You do not deploy from this repository. The deployment is done in the deploy repository
 > of your organisation. To install GovChat, or to test it on your computer, start with
