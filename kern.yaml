@@ -1,0 +1,22 @@
+# Wat de kern is. Gelezen door de app-manager; voor elke organisatie gelijk.
+name: kern
+version: 0.1.0
+contract: v1
+chart: oci://ghcr.io/librechat-ai/librechat-chart/librechat
+chartVersion: 3.2.1          # LibreChat v0.8.9
+releaseName: librechat
+values: values.yaml
+# De Secrets die in het cluster moeten staan, alleen bij naam.
+secrets:
+  - name: librechat-credentials-env
+    keys: [CREDS_KEY, CREDS_IV, JWT_SECRET, JWT_REFRESH_SECRET, OPENID_SESSION_SECRET, OPENID_CLIENT_SECRET, AZURE_MODEL_KEY]
+  - name: librechat-mongodb-auth
+    keys: [mongodb-root-password]
+# Wat een organisatie moet invullen (in values/kern.yaml van de uitrolrepository).
+config:
+  librechat.configEnv.DOMAIN_CLIENT: { verplicht: true }
+  librechat.configEnv.DOMAIN_SERVER: { verplicht: true }
+  librechat.configEnv.AZURE_INSTANCE_NAME: { verplicht: true }
+  librechat.configEnv.AZURE_DEPLOYMENT_NAME: { verplicht: true }
+  librechat.configEnv.AZURE_API_VERSION: { verplicht: true }
+  librechat.configEnv.AZURE_BASE_URL: { verplicht: true }
