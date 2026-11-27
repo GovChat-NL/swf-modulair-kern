@@ -1,11 +1,11 @@
 > # ⚠️ LET OP: tijdelijke naam
-> Deze repository heet nu `modulair-kern` omdat dit een pilot is voor een modulaire GovChat,
+> Deze repository heet nu `swf-modulair-kern` omdat dit een pilot is voor een modulaire GovChat,
 > gestart door Súdwest-Fryslân met toestemming van GovChat-NL. Werkt de pilot en is iedereen
 > het eens, dan kan de naam in de toekomst `GovChat-NL-kern` worden.
 
 <img src="icon.svg" width="64" height="64" alt="">
 
-# modulair-kern
+# swf-modulair-kern
 
 De kale GovChat op Kubernetes: [LibreChat](https://www.librechat.ai) met de officiële
 Helm-chart, en de instellingen die er GovChat van maken. Een medewerker logt in met het
@@ -19,10 +19,10 @@ Dit is één van vier repositories die bij elkaar horen:
 
 | Repository | Wat |
 |---|---|
-| **`modulair-kern`** | de kale chat (deze repository) |
-| [`modulair-app-time`](https://github.com/GovChat-NL/modulair-app-time) | de proefapp, en het voorbeeld van hoe een app eruitziet |
-| [`modulair-manager`](https://github.com/GovChat-NL/modulair-manager) | de app-manager, die de uitrol samenstelt; hier staat ook het appcontract |
-| [`modulair-deploy-template`](https://github.com/GovChat-NL/modulair-deploy-template) | de uitrolbasis waar een organisatie één keer een eigen repository van maakt |
+| **`swf-modulair-kern`** | de kale chat (deze repository) |
+| [`swf-modulair-app-time`](https://github.com/GovChat-NL/swf-modulair-app-time) | de proefapp, en het voorbeeld van hoe een app eruitziet |
+| [`swf-modulair-manager`](https://github.com/GovChat-NL/swf-modulair-manager) | de app-manager, die de uitrol samenstelt; hier staat ook het appcontract |
+| [`swf-modulair-deploy-template`](https://github.com/GovChat-NL/swf-modulair-deploy-template) | de uitrolbasis waar een organisatie één keer een eigen repository van maakt |
 
 ## Wat erin zit
 
@@ -66,8 +66,8 @@ Op een eigen wegwerpcluster, bijvoorbeeld Rancher Desktop, k3d of kind. Je hebt 
 en `helm` nodig. Het image van LibreChat is 4,3 GB; de eerste keer duurt ruim tien minuten.
 
 ```sh
-git clone --branch v0.1.0 https://github.com/GovChat-NL/modulair-kern.git
-cd modulair-kern
+git clone --branch v0.1.0 https://github.com/GovChat-NL/swf-modulair-kern.git
+cd swf-modulair-kern
 local/start.sh
 kubectl -n govchat port-forward service/librechat-librechat 3080:3080
 ```
@@ -81,7 +81,7 @@ van de chart heeft geen arm64-image en draait dus niet op een Mac met Apple Sili
 ## Uitrollen
 
 Niet vanuit deze repository. Een organisatie maakt één keer een eigen repository van
-[`modulair-deploy-template`](https://github.com/GovChat-NL/modulair-deploy-template), kiest
+[`swf-modulair-deploy-template`](https://github.com/GovChat-NL/swf-modulair-deploy-template), kiest
 daar de versie van de kern en de apps, en laat de app-manager de uitrol samenstellen.
 
 ## Een installatie controleren
